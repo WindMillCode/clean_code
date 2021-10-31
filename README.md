@@ -1,6 +1,5 @@
-# Left of pg 52
 
-# Meaningful Namess
+# Meaningful Names
 
 * dont use single letters, makes it hard to search for
 * dont encode variable names
@@ -71,8 +70,8 @@ couchFromMacysAndPjAccount
 * rmbr indentation always make code that can scale
 
 
-# Variables 
-* keep them public
+# Objects and Data Structures
+* keep variables private in order to change them
 * dont expose details of data keep in abstract terms
 
 ```java
@@ -103,4 +102,55 @@ public interface Vehicle {
 * not understanding the law of demeter too well, to clarify i should use properties on the object to get what I need I should use a methods that does it for me
     * according to demeters law - Objects expose behavior and hide data, Data structures expose data and have no significant behavior
 
-# Objects and Data Stuctures
+# Error Handling
+*   Error  handling  is  important, but  if  itobscures logic, it’s wrong.
+* use exceptions rather than return codes
+```java
+public void sendShutDown() {    
+    try {      tryToShutDown();    } 
+    catch (DeviceShutDownError e) {      logger.log(e);    }  
+}
+
+```
+* start with try,catch,finally statement first
+* try to write tests that force exceptions and add behavior to satisfy tests
+* use unchecked exceptions
+* make informative error message
+    * bad
+        * An exception occured, 1 periodic timer left in queue
+    * good
+        * you may have a subscrition that was not unsubbed or a timer that did not complete before the test ended
+    
+* use a wrapper class to conceptualize your error classes, aka exception classes
+* use special case  objects instead of exceptions, better for performance
+```java
+// dont
+try {
+    MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+    m_total += expenses.getTotal();
+} catch (MealExpensesNotFound e) {
+    m_total += getMealPerDiem();
+}
+
+// do 
+MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+m_total += expenses.getTotal();
+public class PerDiemMealExpenses implements MealExpenses {  
+    public int getTotal() {    // return the per diem default  }
+}
+```
+* dont return null, throw exception or return special case, 
+    * returning null makes more work for yourself
+* dont pass null to methods
+    * in your method forbid passing null
+    * use a list of assertions
+
+```java
+public class MetricsCalculator {
+    public double xProjection(Point p1, Point p2) {
+        assert p1 != null: "p1 should not be null";
+        assert p2 != null: "p2 should not be null";
+        return (p2.x– p1.x) * 1.5;
+    }
+}
+```
