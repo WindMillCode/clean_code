@@ -154,3 +154,36 @@ public class MetricsCalculator {
     }
 }
 ```
+
+# Boundaries
+* provides want broad range of support, users want focus on particular needs
+```java
+Map sensors = new HashMap();
+Sensor s = (Sensor)sensors.get(sensorId );
+```
+* we dont want a generic to support anything, thats not clean code because before we interact it takes more code to find out what is the data structure were dealing with
+use generic type
+* use this 
+    * now the user just uses Sensors without having to worry about implementation
+    * Map can evolve without affecting the application
+    * type management handled within class
+```java
+public class Sensors {
+    private Map sensors = new HashMap();
+    public Sensor getById(String id) {
+        return (Sensor) sensors.get(id);
+    }
+    //snip
+}
+```
+
+* __learning tests__ - contain all the functionality you want to use from the 3rd party in a class
+    *  new releases of the third-party package, we run the learning tests to see whether there
+are behavioral differences. 
+
+* depend on something you control, then something you cant or it will control you
+* 3rd party adapters
+
+ new releases of the third-party package, we run the learning tests to see whether there
+are behavioral differences. 
+
